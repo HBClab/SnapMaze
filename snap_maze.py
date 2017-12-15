@@ -116,10 +116,14 @@ def maze_choice():
 	#add options for different mazes
 	maze_a = choice_box.add(viz.BUTTON,'Maze Layout A')
 	maze_b = choice_box.add(viz.BUTTON,'Maze Layout B')
+	maze_c = choice_box.add(viz.BUTTON,'Maze Layout C')
+	maze_d = choice_box.add(viz.BUTTON,'Maze Layout D')
 	
 	#add variables for user chocies
 	maze_a_pressed = viztask.waitButtonDown(maze_a)
 	maze_b_pressed = viztask.waitButtonDown(maze_b)
+	maze_c_pressed = viztask.waitButtonDown(maze_c)
+	maze_d_pressed = viztask.waitButtonDown(maze_d)
 	
 	#data variable to hold user choices
 	data = viz.Data()
@@ -127,14 +131,20 @@ def maze_choice():
 	
 	#get the maze name root, and start/end coordinates from user choice
 	global maze_root; global start_coords; global start_ori; global end_coords
-	yield viztask.waitAny( [ maze_a_pressed, maze_b_pressed ], data )
+	yield viztask.waitAny( [ maze_a_pressed, maze_b_pressed, maze_c_pressed, maze_d_pressed ], data )
 	if data.condition is maze_a_pressed:
 		choice_box.remove(); yield phase_choice()
-		maze_root = 'C:\Experiments\AMBI2016\SNAP\Programs_Environments\SNAPMazeA'; start_coords = (0,40,0); start_ori = (0,0,0); end_coords = (-745,-700,2125,2180)
+		maze_root = 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeA'; start_coords = (0,40,0); start_ori = (0,0,0); end_coords = (-745,-700,2125,2180)
 	elif data.condition is maze_b_pressed:
 		choice_box.remove(); yield phase_choice()
-		maze_root = 'C:\Experiments\AMBI2016\SNAP\Programs_Environments\SNAPMazeB'; start_coords = (-1114,40,2151); start_ori = (-180,0,0); end_coords = (-1876,-1795,115,156)
-
+		maze_root = 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeB'; start_coords = (-1114,40,2151); start_ori = (-180,0,0); end_coords = (-1876,-1795,115,156)
+	elif data.condition is maze_c_pressed:
+		choice_box.remove(); yield phase_choice()
+		maze_root = 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeC'; start_coords = (260,0,903); start_ori = (0,0,0); end_coords = (1350,1420,1350,1400)
+	elif data.condition is maze_d_pressed:
+		choice_box.remove(); yield phase_choice()
+		maze_root = 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeD'; start_coords = (65,0,1010); start_ori = (0,0,0); end_coords = (30,100,390,400)
+	choice_box.remove()
 	
 	
 	#turn the mouse off so it doesn't interfere with the environment
@@ -367,18 +377,30 @@ def run_condition_two():
 	###############
 	
 	#setup maze start and end locations for each maze
-	if maze_root == 'C:\Experiments\AMBI2016\SNAP\Programs_Environments\SNAPMazeA':
+	if maze_root == 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeA':
 		#setup start location dictionary {Start Location:((Start Coordinates),(Start Orientation)),...}
 		start_dic = {'A': ((-1049,40,1530),(0,0,0)), 'B': ((675,40,1814),(-90,0,0)), 'C': ((110,40,678),(0,0,0)), 'D': ((-725,40,2155),(-90,0,0)), 'E': ((0,40,0),(0,0,0)), 'F': ((-1040,0,670),(-180,0,0))}
 		#setup object list (Object,Start Location,End Coordinates)
 		objects = (  ('Table','C',(-710,-664,669,769)), ('Chair','A',(397,464,1784,1849)),('Round Stool','F',(148,174,1445,1480)), ('Rug','E',(-312,-259,1060,1130)), ('Mirror','B',(-330,259,730,755)), ('Wooden Basket','A',(-1070,-994,361,433)),\
 					('Bench with cushions','B',(-316,-194,1784,1827)),('Coat Rack','D',(-675,-645,890,945)), ('Wooden Chest','E',(-1071,-1032,1170,1850)), ('Potted Plant','F',(-6,40,206,260)),  ('TV','D',(113,149,1013,1111)), ('Curtains','C',(-1070,-1022,1518,1538)) )
-	elif maze_root == 'C:\Experiments\AMBI2016\SNAP\Programs_Environments\SNAPMazeB':
+	elif maze_root == 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeB':
 		#setup start location dictionary {Start Location:((Start Coordinates),(Start Orientation)),...}
 		start_dic = {'A': ((-1835,40,1100),(0,0,0)), 'B': ((12,40,-10),(0,0,0)), 'C': ((-1114,40,2151),(-180,0,0)), 'D': ((-1835,40,545),(-180,0,0)), 'E': ((-1255,40,323),(-90,0,0)), 'F': ((410,40,737),(-90,0,0))}
 		#setup object list (Object,Start Location,End Coordinates)
 		objects = ( ('Purple Chair','C',(-223,-165,1030,1080)),('Round Table','E',(-381,-277,282,358)),('Fireplace','B',(-1873,-1854,289,371)), ('Long Table','A',(-1058,-951,634,669)), ('Dining Chair','F',(-854,-826,1003,1048)), ('Wall Lamp','E',(-1856,-1802,1057,1080)), \
 		('Window','F',(-1519,-1440,1410,1433)), ('Umbrella Stand','D',(-678,-628,681,715)),('Vase','A',(-19,46,-57,-10)), ('Cabinet with Dishes','B',(-1290,-1251,1019,1201)), ('Floor Lamp','D',(-817,-772,1435,1491)), ('Rug','C',(-1600,-1510,667,715)) )
+	elif maze_root == 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeC':
+		#setup start location dictionary {Start Location:((Start Coordinates),(Start Orientation)),...}
+		start_dic = {'A': ((260,0,903),(0,0,0)), 'B': ((1375,0,1375),(0,0,0)), 'C': ((110,0,6),(0,0,0)), 'D': ((1305,0,225),(0,0,0)), 'E': ((450,0,750),(0,0,0)), 'F': ((1060,0,670),(0,0,0))}
+		#setup object list (Object,Start Location,End Coordinates)
+		objects = ( ('Crib','A',(430,470,85,155)), ('Dart Board','B',(230,293,1275,1325)), ('Playset','C',(1275,1340,250,325)), ('Sink','D',(1360,1400,1075,1125)), ('Ladder','E',(75,140,250,300)), ('Bench','F',(825,850,725,785)),('Aquarium','B',(180,250,80,120)), ('Basket','E',(990,1040,1080,1115)), \
+		('Freezer','F',(330,410,1080,1115)), ('File cabinet','A',(745,800,395,430)), ('potted plants','D',(400,430,550,630)), ('washer','C',(1040,1090,185,235)))
+	elif maze_root == 'C:\Users\matthew\Desktop\mazescripts\original\SNAPMazeD':
+		#setup start location dictionary {Start Location:((Start Coordinates),(Start Orientation)),...}
+		start_dic = {'A': ((65,0,1010),(0,0,0)), 'B': ((70,0,370),(0,0,0)), 'C': ((1450,0,805),(0,0,0)), 'D': ((700,0,235),(0,0,0)), 'E': ((790,0,1140),(0,0,0)), 'F': ((350,0,790),(0,0,0))}
+		#setup object list (Object,Start Location,End Coordinates)
+		objects = ( ('Drums','A',(1410,1480,960,1000)), ('Fountain','B',(300,350,770,810)), ('Treadmill','C',(300,340,1340,1410)), ('Bed','D',(1200,1240,1290,1350)), ('Crib5','E',(-550,-450,250,350)), ('Crib6','F',(-550,-450,250,350)),('Crib7','D',(-550,-450,250,350)), ('Crib8','E',(-550,-450,250,350)), \
+		('Crib9','F',(-550,-450,250,350)), ('Crib10','A',(-550,-450,250,350)), ('Crib11','D',(-550,-450,250,350)), ('Crib12','C',(-550,-450,250,350)))
 	else:
 		print 'Maze ' + maze_root + ' not supported for condition 2 testing phase.'
 
@@ -644,7 +666,7 @@ def write_trial_data():
 	average_velocity = total_distance / elapsed_time
 	
 	#Open output file
-	file = open('C:\Experiments\AMBI2016\SNAP\Programs_Environments\\' + str(subject_id_data) + '.txt' ,'a')
+	file = open('C:\Users\matthew\Desktop\mazescripts\original' + str(subject_id_data) + '.txt' ,'a')
 	
 	#Write the Maze Name
 	file.write('\n' + 'Maze: ' + str(maze_root))
