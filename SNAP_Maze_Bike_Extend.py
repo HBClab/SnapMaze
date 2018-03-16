@@ -345,7 +345,7 @@ def run_condition_one():
 
             # disable events and write the data
             disable()
-            write_trial_data(output_df)
+            write_trial_data(output_df, coordinates_df)
 
             # turn maze off and then move
             maze.visible(viz.OFF)
@@ -413,7 +413,7 @@ def run_condition_one():
 
         # disable all timers
         disable()
-        write_trial_data(output_df)
+        write_trial_data(output_df, coordinates_df)
 
         # turn maze off and then move
         maze.visible(viz.OFF)
@@ -490,7 +490,7 @@ def run_condition_two():
 
             # disable all timers
             disable()
-            write_trial_data(output_df)
+            write_trial_data(output_df, coordinates_df)
 
             # turn maze off and then move
             maze.visible(viz.OFF)
@@ -594,7 +594,7 @@ def run_condition_two():
 
         # disable all timers
         disable()
-        write_trial_data(output_df)
+        write_trial_data(output_df, coordinates_df)
 
         # turn maze off and then move
         maze.visible(viz.OFF)
@@ -650,7 +650,7 @@ def practice_maze():
 
     # disable events and quit maze
     disable()
-    write_trial_data(output_df)
+    write_trial_data(output_df, coordinates_df)
     maze.remove()
 
 
@@ -706,7 +706,7 @@ def expertise_maze():
 
     #disable and quit
     disable()
-    write_trial_data(output_df)
+    write_trial_data(output_df, coordinates_df)
     maze.remove()
 
 
@@ -748,7 +748,7 @@ def learn_move():
 
     # disable events and turn maze off
     disable()
-    write_trial_data(output_df)
+    write_trial_data(output_df, coordinates_df)
     yield maze.visible(viz.OFF)
 
     # Display the insturctions
