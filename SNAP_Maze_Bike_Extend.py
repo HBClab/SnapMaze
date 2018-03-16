@@ -885,10 +885,14 @@ def write_trial_data():
         output_info['object'] = trial_object
 
     # append data to output_df
-    output_df.append(output_info, ignore_index=True)
+    output_df = update_df(output_info, output_df)
 
     # write the current info to file
     output_df.to_csv(output_file, sep='\t', index=False)
+
+
+def df_update(out_info, df):
+    return df.append(out_info, ignore_index=True)
 
 
 def starter():
