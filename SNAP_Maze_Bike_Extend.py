@@ -337,7 +337,7 @@ def run_condition_one():
 
             # disable events and write the data
             disable()
-            write_trial_data()
+            write_trial_data(output_df)
 
             # turn maze off and then move
             maze.visible(viz.OFF)
@@ -405,7 +405,7 @@ def run_condition_one():
 
         # disable all timers
         disable()
-        write_trial_data()
+        write_trial_data(output_df)
 
         # turn maze off and then move
         maze.visible(viz.OFF)
@@ -482,7 +482,7 @@ def run_condition_two():
 
             # disable all timers
             disable()
-            write_trial_data()
+            write_trial_data(output_df)
 
             # turn maze off and then move
             maze.visible(viz.OFF)
@@ -586,7 +586,7 @@ def run_condition_two():
 
         # disable all timers
         disable()
-        write_trial_data()
+        write_trial_data(output_df)
 
         # turn maze off and then move
         maze.visible(viz.OFF)
@@ -642,7 +642,7 @@ def practice_maze():
 
     # disable events and quit maze
     disable()
-    write_trial_data()
+    write_trial_data(output_df)
     maze.remove()
 
 
@@ -698,7 +698,7 @@ def expertise_maze():
 
     #disable and quit
     disable()
-    write_trial_data()
+    write_trial_data(output_df)
     maze.remove()
 
 
@@ -740,7 +740,7 @@ def learn_move():
 
     # disable events and turn maze off
     disable()
-    write_trial_data()
+    write_trial_data(output_df)
     yield maze.visible(viz.OFF)
 
     # Display the insturctions
@@ -823,7 +823,7 @@ def update_coordinates():
     coordinate_array = append(coordinate_array, elapsed)
 
 
-def write_trial_data():
+def write_trial_data(tmpdf):
 
     # Get time elapsed for the global clock
     elapsed_time = movement_time.GetTime()
@@ -885,7 +885,7 @@ def write_trial_data():
         output_info['object'] = trial_object
 
     # append data to output_df
-    output_df = update_df(output_info, output_df)
+    output_df = df_update(output_info, tmpdf)
 
     # write the current info to file
     output_df.to_csv(output_file, sep='\t', index=False)
