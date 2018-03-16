@@ -10,6 +10,8 @@ import vizinfo
 import vizmat
 import vizact
 import vizjoy
+import pandas as pd
+import os.path
 
 # launch vizard and enable physics and joystick
 viz.go(viz.FULLSCREEN)
@@ -59,21 +61,37 @@ def get_subject_info():
 
     # get the data from the input box
     global subject_id_data
+    global experimenter_data
     subject_id_data = subject_id.get()
     experimenter_data = experimenter.get()
 
     input_box.remove()
 
     # get the date
-    date = strftime("%m/%d/%Y", localtime())
+    global cur_date
+    cur_date = strftime("%m/%d/%Y", localtime())
 
     # write out information
 
-    output = open(str(subject_id_data) + '.txt', 'a')
-    output.write('Subject ID: ' + str(subject_id_data))
-    output.write('\n' + 'Experimenter: ' + str(experimenter_data))
-    output.write('\n' + 'Date: ' + str(date))
-    output.close()
+    # define output file globals
+    global output_df
+    global output_file
+    output_file = 'sub-' + subject_id_data + '.tsv'
+
+    # check if output file exists
+    if os.path.isfile(output_file):
+        output_df = pd.read_csv(output_file, sep='\t')
+    else:
+        columns = ['study_id', 'lab_id', 'experimenter', 'date', 'condition',
+                   'maze', 'phase', 'trial', 'sub_trial', 'object',
+                   'movement_time', 'average_velocity', 'total_distance']
+        output_df = pd.DataFrame(columns=columns)
+
+    # output = open(str(subject_id_data) + '.txt', 'a')
+    # output.write('Subject ID: ' + str(subject_id_data))
+    # output.write('\n' + 'Experimenter: ' + str(experimenter_data))
+    # output.write('\n' + 'Date: ' + str(date))
+    # output.close()
 
 
 def task_choice():
@@ -259,9 +277,9 @@ def run_condition_one():
     global trial_time
 
     ################
-    #Learning Phase#
+    # Learning Phase#
     ################
-    #phase = 'Learning'
+    # phase = 'Learning'
 
     # setup viewpoint and positioning
     yield setup_view()
@@ -840,31 +858,37 @@ def write_trial_data():
             total_distance = total_distance + distance
     average_velocity = total_distance / elapsed_time
 
-    # Open output file
-    file = open('C:\Experiments\Bike_Extend_Pilot\SNAP\\' +
-                str(subject_id_data) + '.txt', 'a')
+    # collect output info
+    output_info = {
+        'study_id': subject_id_data,
+        'lab_id': '',
+        'experimenter': experimenter_data,
+        'date': cur_date,
+        'condition': condition,
+        'maze': maze_root,
+        'phase': phase,
+        'trial': trial_number,
+        'movement_time': elapsed_time,
+        'average_velocity': average_velocity,
+        'total_distance': total_distance,
+        'coordinates': resized_coordinate_array,
+    }
 
-    # Write the Maze Name
-    file.write('\n' + 'Maze: ' + str(maze_root))
+    # if it is a condition 1 learning phase trial, output the subtrial
+    # sub_trial (special case)
+    if condition == 1 and phase == 'Learning':
+        output_info['sub_trial'] = sub_trial_number
 
-    # Write condition,phase and trial if is not a practice or visomotor maze
-    if maze_root != 'VMS' and maze_root != 'PMS':
-        file.write('\n' + 'Condition: ' + str(condition))
-        file.write('\n' + 'Phase: ' + phase)
-        file.write('\n' + 'Trial Number: ' + str(trial_number))
-        # if it is a condition 1 learning phase trial, output the subtrial
-        if condition == 1 and phase == 'Learning':
-            file.write('\n' + 'Sub_Trial Number: ' + str(sub_trial_number))
-        # if it is condition 2 and a test phase trial, output the object
-        if condition == 2 and phase == 'Testing':
-            file.write('\n' + 'Object: ' + trial_object)
+    # if it is condition 2 and a test phase trial, output the object
+    # object (special case)
+    if condition == 2 and phase == 'Testing':
+        output_info['object'] = trial_object
 
-    # Write out the rest of the data
-    file.write('\n' + 'Movement Time: ' + str(elapsed_time))
-    file.write(str('\n' + 'Average Velocity: ' + str(average_velocity)))
-    file.write(str('\n' + 'Total Distance: ' + str(total_distance)))
-    file.write('\n' + 'Coordinates: ' + '\n' + str(resized_coordinate_array))
-    file.close()
+    # append data to output_df
+    output_df.append(output_info)
+
+    # write the current info to file
+    output_df.to_csv(output_file, sep='\t', index=False)
 
 
 def starter():
