@@ -76,8 +76,10 @@ def get_subject_info():
     # define output file globals
     global output_df
     global output_file
+    global coordinates_df
+    global coordinates_file
     output_file = 'sub-' + subject_id_data + '.tsv'
-
+    coordinates_file = 'sub-' + subject_id_data + 'coordinates.tsv'
     # check if output file exists
     if os.path.isfile(output_file):
         output_df = pd.read_csv(output_file, sep='\t')
@@ -86,6 +88,12 @@ def get_subject_info():
                    'maze', 'phase', 'trial', 'sub_trial', 'object',
                    'movement_time', 'average_velocity', 'total_distance']
         output_df = pd.DataFrame(columns=columns)
+
+    if os.path.isfile(coordinates_file):
+        coordinates_df = pd.read_csv(output_file, sep='\t')
+    else:
+        coord_columns = ['coord_1', 'coord_2', 'coord_3', 'coord_4']
+        coordinates_df = pd.DataFrame(columns=coord_columns)
 
     # output = open(str(subject_id_data) + '.txt', 'a')
     # output.write('Subject ID: ' + str(subject_id_data))
@@ -823,7 +831,7 @@ def update_coordinates():
     coordinate_array = append(coordinate_array, elapsed)
 
 
-def write_trial_data(tmpdf):
+def write_trial_data(tmpdf, tmpcoordsdf):
 
     # Get time elapsed for the global clock
     elapsed_time = movement_time.GetTime()
@@ -871,24 +879,43 @@ def write_trial_data(tmpdf):
         'movement_time': elapsed_time,
         'average_velocity': average_velocity,
         'total_distance': total_distance,
-        'coordinates': resized_coordinate_array,
     }
 
+    len_coords = len(resized_coordinate_array)
+    coord_surplus_info = {
+        'study_id': [subject_id_data] * len_coords,
+        'experimenter': [experimenter_data] * len_coords,
+        'date': [cur_date] * len_coords,
+        'condition': [condition] * len_coords,
+        'maze': [maze_root] * len_coords,
+        'phase': [phase] * len_coords,
+        'trial': [trial_number] * len_coords,
+    }
     # if it is a condition 1 learning phase trial, output the subtrial
     # sub_trial (special case)
     if condition == 1 and phase == 'Learning':
         output_info['sub_trial'] = sub_trial_number
-
+        coord_surplus_info['sub_trial'] = [sub_trial_number] * len_coords
     # if it is condition 2 and a test phase trial, output the object
     # object (special case)
     if condition == 2 and phase == 'Testing':
         output_info['object'] = trial_object
+        coord_surplus_info['object'] = [trial_object] * len_coords
 
     # append data to output_df
     output_df = df_update(output_info, tmpdf)
 
     # write the current info to file
     output_df.to_csv(output_file, sep='\t', index=False)
+
+    # append data to coordinates_df
+    coord_tmp = pd.DataFrame(resized_coordinate_array, columns=coord_columns)
+    coord_info_tmp = pd.DataFrame(coord_surplus_info)
+    coord_total_tmp = pd.concat([coord_tmp, coord_info_tmp], axis=1)
+    coordinates_df = df_update(tmpcoordsdf, coord_total_tmp)
+
+    # write the current info to file
+    coordinates_df.to_csv(coordinates_file, sep='\t', index=False)
 
 
 def df_update(out_info, df):
