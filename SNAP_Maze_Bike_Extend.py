@@ -80,7 +80,7 @@ def get_subject_info():
     global coordinates_file
     global coord_columns
     output_file = 'sub-' + subject_id_data + '.tsv'
-    coordinates_file = 'sub-' + subject_id_data + 'coordinates.tsv'
+    coordinates_file = 'sub-' + subject_id_data + '_coordinates.tsv'
     # check if output file exists
     if os.path.isfile(output_file):
         output_df = pd.read_csv(output_file, sep='\t')
