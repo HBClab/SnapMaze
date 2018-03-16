@@ -833,6 +833,10 @@ def update_coordinates():
 
 
 def write_trial_data(tmpdf, tmpcoordsdf):
+    """
+    tmpdf: the dataframe keeping track of summary outcomes
+    tmpcoordsdf: the dataframe keeping track of coordinate information
+    """
 
     # Get time elapsed for the global clock
     elapsed_time = movement_time.GetTime()
@@ -882,6 +886,7 @@ def write_trial_data(tmpdf, tmpcoordsdf):
         'total_distance': total_distance,
     }
 
+    # special info to uniquely identify coordinates
     len_coords = len(resized_coordinate_array)
     coord_surplus_info = {
         'study_id': [subject_id_data] * len_coords,
@@ -892,6 +897,7 @@ def write_trial_data(tmpdf, tmpcoordsdf):
         'phase': [phase] * len_coords,
         'trial': [trial_number] * len_coords,
     }
+
     # if it is a condition 1 learning phase trial, output the subtrial
     # sub_trial (special case)
     if condition == 1 and phase == 'Learning':
@@ -910,9 +916,13 @@ def write_trial_data(tmpdf, tmpcoordsdf):
     output_df.to_csv(output_file, sep='\t', index=False)
 
     # append data to coordinates_df
+    # make dataframe from resized_coordinate_array
     coord_tmp = pd.DataFrame(resized_coordinate_array, columns=coord_columns)
+    # additional info to identify coordinates
     coord_info_tmp = pd.DataFrame(coord_surplus_info)
+    # merge the dataframes
     coord_total_tmp = pd.concat([coord_tmp, coord_info_tmp], axis=1)
+
     coordinates_df = df_update(tmpcoordsdf, coord_total_tmp)
 
     # write the current info to file
