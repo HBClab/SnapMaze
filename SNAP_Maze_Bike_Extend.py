@@ -78,6 +78,7 @@ def get_subject_info():
     global output_file
     global coordinates_df
     global coordinates_file
+    global coord_columns
     output_file = 'sub-' + subject_id_data + '.tsv'
     coordinates_file = 'sub-' + subject_id_data + 'coordinates.tsv'
     # check if output file exists
