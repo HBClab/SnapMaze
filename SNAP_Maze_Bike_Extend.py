@@ -885,7 +885,7 @@ def write_trial_data():
         output_info['object'] = trial_object
 
     # append data to output_df
-    output_df.append(output_info)
+    output_df.append(output_info, ignore_index=True)
 
     # write the current info to file
     output_df.to_csv(output_file, sep='\t', index=False)
