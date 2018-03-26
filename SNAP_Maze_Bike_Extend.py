@@ -931,10 +931,6 @@ def write_trial_data():
     coordinates_df.to_csv(coordinates_file, sep='\t', index=False)
 
 
-def df_update(out_info, df):
-    return df.append(out_info, ignore_index=True)
-
-
 def starter():
     yield get_subject_info()
     yield task_choice()
