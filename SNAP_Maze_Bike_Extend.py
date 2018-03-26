@@ -346,7 +346,7 @@ def run_condition_one():
 
             # disable events and write the data
             disable()
-            write_trial_data(output_df, coordinates_df)
+            write_trial_data()
 
             # turn maze off and then move
             maze.visible(viz.OFF)
@@ -414,7 +414,7 @@ def run_condition_one():
 
         # disable all timers
         disable()
-        write_trial_data(output_df, coordinates_df)
+        write_trial_data()
 
         # turn maze off and then move
         maze.visible(viz.OFF)
@@ -491,7 +491,7 @@ def run_condition_two():
 
             # disable all timers
             disable()
-            write_trial_data(output_df, coordinates_df)
+            write_trial_data()
 
             # turn maze off and then move
             maze.visible(viz.OFF)
@@ -595,7 +595,7 @@ def run_condition_two():
 
         # disable all timers
         disable()
-        write_trial_data(output_df, coordinates_df)
+        write_trial_data()
 
         # turn maze off and then move
         maze.visible(viz.OFF)
@@ -651,7 +651,7 @@ def practice_maze():
 
     # disable events and quit maze
     disable()
-    write_trial_data(output_df, coordinates_df)
+    write_trial_data()
     maze.remove()
 
 
@@ -707,7 +707,7 @@ def expertise_maze():
 
     #disable and quit
     disable()
-    write_trial_data(output_df, coordinates_df)
+    write_trial_data()
     maze.remove()
 
 
@@ -749,7 +749,7 @@ def learn_move():
 
     # disable events and turn maze off
     disable()
-    write_trial_data(output_df, coordinates_df)
+    write_trial_data()
     yield maze.visible(viz.OFF)
 
     # Display the insturctions
@@ -832,11 +832,13 @@ def update_coordinates():
     coordinate_array = append(coordinate_array, elapsed)
 
 
-def write_trial_data(tmpdf, tmpcoordsdf):
+def write_trial_data():
     """
     tmpdf: the dataframe keeping track of summary outcomes
     tmpcoordsdf: the dataframe keeping track of coordinate information
     """
+    global output_df
+    global coordinates_df
 
     # Get time elapsed for the global clock
     elapsed_time = movement_time.GetTime()
@@ -910,7 +912,7 @@ def write_trial_data(tmpdf, tmpcoordsdf):
         coord_surplus_info['object'] = [trial_object] * len_coords
 
     # append data to output_df
-    output_df = df_update(output_info, tmpdf)
+    output_df = output_df.append(output_info, ignore_index=True)
 
     # write the current info to file
     output_df.to_csv(output_file, sep='\t', index=False)
@@ -923,7 +925,7 @@ def write_trial_data(tmpdf, tmpcoordsdf):
     # merge the dataframes
     coord_total_tmp = pd.concat([coord_tmp, coord_info_tmp], axis=1)
 
-    coordinates_df = df_update(tmpcoordsdf, coord_total_tmp)
+    coordinates_df = coordinates_df.append(coord_total_tmp, ignore_index=True)
 
     # write the current info to file
     coordinates_df.to_csv(coordinates_file, sep='\t', index=False)
