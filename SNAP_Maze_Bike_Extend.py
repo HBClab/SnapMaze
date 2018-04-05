@@ -90,10 +90,10 @@ def get_subject_info():
                    'movement_time', 'average_velocity', 'total_distance']
         output_df = pd.DataFrame(columns=columns)
 
+    coord_columns = ['coord_1', 'coord_2', 'coord_3', 'coord_4']
     if os.path.isfile(coordinates_file):
         coordinates_df = pd.read_csv(output_file, sep='\t')
     else:
-        coord_columns = ['coord_1', 'coord_2', 'coord_3', 'coord_4']
         coordinates_df = pd.DataFrame(columns=coord_columns)
 
     # output = open(str(subject_id_data) + '.txt', 'a')
